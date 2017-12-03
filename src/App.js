@@ -7,32 +7,33 @@ import "./App.css";
 
 class App extends Component {
     // Setting this.state.friends to the friends json array
+    //state is a property that is an object 
     state = {
         friends
     };
 
-    shuffleFriends = id => {
+    //properties of a class, do not need a let or var
+    score = 0;
+    previousFriendId = 0;
 
+    shuffleFriends = (id) => {
+        //evaluate for points
+        if (id === this.previousFriendId) {
+            this.score--;
+        } else {
+            this.score++;
+        }
+
+        this.previousFriendId = id;
+        console.log('score', this.score);
+
+        //shuffle friends
         const friends = this.state.friends.sort(function () {
-            return .5 - Math.random();
+            return Math.random();
         });
         this.setState({ friends });
     };
 
-
-    matchFriend = id => {
-        //let firstFriendId;
-        //let nextFriendId = this.pro.id;
-        //let score = 0;
-
-        //if (nextFriendId === firstFriendId) {
-        //    score--
-        //} else {
-        //    score++
-        //}
-
-        //nextFriendId = firstFriendId;
-    };
 
     // Map over this.state.friends and render a FriendCard component for each friend object
     render() {
@@ -40,7 +41,7 @@ class App extends Component {
             <Wrapper>
                 <Title>Friends List</Title>
                 {this.state.friends.map(friend => (
-                    <FriendCard
+                    <FriendCard           
                         shuffleFriends={this.shuffleFriends}
                         id={friend.id}
                         key={friend.id}
