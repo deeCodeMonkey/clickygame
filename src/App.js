@@ -22,6 +22,7 @@ class App extends Component {
         console.log('indexOf', this.state.pickedFriends.indexOf(id));
 
         if (this.state.pickedFriends.indexOf(id) >= 0) {
+
             //state also needed a frickin' callback!
             this.setState({
                 score: 0,
@@ -45,8 +46,8 @@ class App extends Component {
         }
     
         //shuffle friends
-        const friends = this.state.friends.sort(function () {
-            return Math.random();
+        const friends = this.state.friends.sort( (a, b) => {
+            return 0.5 - Math.random();
         });
         this.setState({ friends });
         console.log('friendsList', this.state.friends);
