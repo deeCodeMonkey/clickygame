@@ -8,43 +8,60 @@ import "./App.css";
 class App extends Component {
     // Setting this.state.friends to the friends json array
     //state is a property that is an object 
+    //properties of a class, do not need a let or var
     state = {
-        friends
+        friends,
+        score: 0,
+        pickedFriends: []
+
     };
 
-    //properties of a class, do not need a let or var
-    score = 0;
-    pickedFriends = [];
-
-
     shuffleFriends = (id) => {
+
         //evaluate for points
-        if (this.pickedFriends.indexOf(id) >= 0) {
-            this.score = 0;
-            this.pickedFriends = [];
+        console.log('indexOf', this.state.pickedFriends.indexOf(id));
+
+        if (this.state.pickedFriends.indexOf(id) >= 0) {
+            //state also needed a frickin' callback!
+            this.setState({
+                score: 0,
+                pickedFriends: []
+            }, () => {
+                console.log('ID duplicate:', id);
+                console.log('reset score', this.state.score);
+                console.log('reset picked', this.state.pickedFriends);
+            });
+
         } else {
-            this.pickedFriends.push(id);
-            this.score++;
+            //values inside array can be changed, but array still considered immutable
+            this.state.pickedFriends.push(id);
+            this.setState({
+                score: this.state.score + 1
+            }, () => {
+                console.log('ID PASSED-UNIQUE:', id);
+                console.log('score', this.state.score);
+                console.log('pickedFriends', this.state.pickedFriends);
+            });
         }
-
-        console.log('score', this.score);
-        console.log('pickedFriends', this.pickedFriends);
-
+    
         //shuffle friends
         const friends = this.state.friends.sort(function () {
             return Math.random();
         });
         this.setState({ friends });
+        console.log('friendsList', this.state.friends);
     };
+
+
 
 
     // Map over this.state.friends and render a FriendCard component for each friend object
     render() {
         return (
             <Wrapper>
-                <Title score={this.score}>Click On A uNiQuE Friend!</Title>
+                <Title score={this.state.score}>Click On A uNiQuE Friend!</Title>
                 {this.state.friends.map(friend => (
-                    <FriendCard           
+                    <FriendCard
                         shuffleFriends={this.shuffleFriends}
                         id={friend.id}
                         key={friend.id}
